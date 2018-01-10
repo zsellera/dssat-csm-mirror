@@ -13,7 +13,7 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
    						"CMakeCache.txt and CMakeFiles\n")
 endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 
-PROJECT(DSSAT-CSM Fortran )
+PROJECT(DSSAT-CSM Fortran C CXX)
 
 ##########################################################################################
 # DSSAT_VERSION from ModuleDefs.for
@@ -50,6 +50,7 @@ ENDIF(NOT CMAKE_Fortran_COMPILER_SUPPORTS_F90)
 # RELEASE, and TESTING.  You should  review this file and make sure the flags 
 # are to your liking.
 INCLUDE(${CMAKE_MODULE_PATH}/SetFortranFlags.cmake) 
+INCLUDE(${CMAKE_MODULE_PATH}/SetCXXFlags.cmake)
 
 # There is an error in CMAKE with this flag for pgf90.  Unset it
 GET_FILENAME_COMPONENT(FCNAME ${CMAKE_Fortran_COMPILER} NAME)
@@ -74,7 +75,11 @@ ENDIF(WIN32)
 # Add the source files
 set(
     source_list
-    	"${OSDefinitions}" 
+    	"${OSDefinitions}"
+        "FlexibleIO/Util/Util.cpp"
+        "FlexibleIO/csm_io.f90"
+        "FlexibleIO/GettersAndSetters.cpp"
+        "FlexibleIO/InputWeather.cpp" 
         "Utilities/ModuleDefs.for" 
         "Utilities/DATES.for" 
         "Utilities/ERROR.for" 
@@ -758,6 +763,8 @@ set(
         "Weather/WTHMOD.for" 
 )
 ADD_EXECUTABLE(${EXECUTABLE_NAME} ${source_list})
+
+SET_TARGET_PROPERTIES(${EXECUTABLE_NAME} PROPERTIES LINKER_LANGUAGE Fortran)
 
 foreach(source IN LISTS source_list)
     get_filename_component(source_path "${source}" PATH)
