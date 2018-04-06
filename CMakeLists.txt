@@ -76,10 +76,11 @@ ENDIF(WIN32)
 set(
     source_list
     	"${OSDefinitions}"
+        "FlexibleIO/Interface/FInterface.f90"
+        "FlexibleIO/Interface/CInterface.cpp"
+        "FlexibleIO/Data/FlexibleIO.cpp"
+        "FlexibleIO/Input/InputWeather.cpp" 
         "FlexibleIO/Util/Util.cpp"
-        "FlexibleIO/csm_io.f90"
-        "FlexibleIO/GettersAndSetters.cpp"
-        "FlexibleIO/InputWeather.cpp" 
         "Utilities/ModuleDefs.for" 
         "Utilities/DATES.for" 
         "Utilities/ERROR.for" 
