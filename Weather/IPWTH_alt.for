@@ -38,7 +38,7 @@ C=======================================================================
 !-----------------------------------------------------------------------
 ! FlexibleIO
 !-----------------------------------------------------------------------
-      use csm_io
+      use flexibleio
 !-----------------------------------------------------------------------
       IMPLICIT NONE
       SAVE
@@ -59,8 +59,6 @@ C=======================================================================
 !-----------------------------------------------------------------------
       CHARACTER*12  FILEX
       INTEGER EOF
-      !JSONEXIST : values : 1 json file exist, -1 json file doesn't exist
-      INTEGER JSONEXIST
       INTEGER DATE
       INTEGER END_OF_FILE
 !-----------------------------------------------------------------------
@@ -197,11 +195,7 @@ C     The components are copied into local variables for use here.
         ENDIF
         INQUIRE (FILE = FILEWW,EXIST = FEXIST)
 !-----------------------------------------------------------------------
-! FlexibleIO
-!-----------------------------------------------------------------------
-        call FINDJSON(FILEX,JSONEXIST)
-!-----------------------------------------------------------------------
-        IF (.NOT. FEXIST .and.JSONEXIST== -1) THEN
+        IF (.NOT. FEXIST ) THEN
           ErrCode = 29
           CALL WeatherError(CONTROL, ErrCode, FILEWW, 0, YRDOYWY, YREND)
           RETURN
@@ -229,10 +223,11 @@ C     The components are copied into local variables for use here.
 
       IF(ErrCode .NE. 0) THEN
         CALL WeatherError(CONTROL, ErrCode, FILEWW, 0, YRDOYWY, YREND)
+        CALL ERROR(ERRKEY,ErrCode,FILEWW,0)
         RETURN
       ENDIF
 
-      CALL csminp%get('WTH', YRDOY-1,"DATE",DATE)
+      CALL fio%get('WTH', YRDOY-1,"DATE",DATE)
 !-----------------------------------------------------------------------
       IF (FILEW /= LastFileW) THEN
 !       NRecords = 0
@@ -241,14 +236,11 @@ C     The components are copied into local variables for use here.
         LINWTH = 0
         LongFile = .FALSE.
 !-----------------------------------------------------------------------
-! FlexibleIO
-!-----------------------------------------------------------------------
-        call FINDJSON(FILEX,JSONEXIST)
-!-----------------------------------------------------------------------
         INQUIRE(FILE=FILEWW,EXIST=FEXIST)
-        IF (.NOT. FEXIST .AND. JSONEXIST == -1) THEN
+        IF (.NOT. FEXIST ) THEN
           ErrCode = 30
           CALL WeatherError(CONTROL, ErrCode, FILEWW, 0, YRDOYWY, YREND)
+          CALL ERROR(ERRKEY,ErrCode,FILEWW,0)
           RETURN
         ENDIF
         WSTAT = FILEW(1:8)
@@ -267,15 +259,15 @@ C     The components are copied into local variables for use here.
 !-----------------------------------------------------------------------
 ! FlexibleIO
 !-----------------------------------------------------------------------
-        CALL csminp%get('WTH', "INSI",INSI)
-        CALL csminp%get('WTH', "LAT",XLAT)
-        CALL csminp%get('WTH', "LONG",XLONG)
-        CALL csminp%get('WTH', "ELEV",XELEV)
-        CALL csminp%get('WTH', "TAV",TAV)
-        CALL csminp%get('WTH', "AMP",TAMP)
-        CALL csminp%get('WTH', "REFHT",REFHT)
-        CALL csminp%get('WTH', "WNDHT",WINDHT)
-        CALL csminp%get('WTH', "CCO2",CCO2)
+        CALL fio%get('WTH', "INSI",INSI)
+        CALL fio%get('WTH', "LAT",XLAT)
+        CALL fio%get('WTH', "LONG",XLONG)
+        CALL fio%get('WTH', "ELEV",XELEV)
+        CALL fio%get('WTH', "TAV",TAV)
+        CALL fio%get('WTH', "AMP",TAMP)
+        CALL fio%get('WTH', "REFHT",REFHT)
+        CALL fio%get('WTH', "WNDHT",WINDHT)
+        CALL fio%get('WTH', "CCO2",CCO2)
 
         IF(XLAT .EQ. 0.0 ) THEN
              MSG(1) = 'Error reading latitude, value of zero'
@@ -349,30 +341,30 @@ C       Substitute default values if REFHT or WINDHT are missing.
 !-----------------------------------------------------------------------
 ! FlexibleIO
 !-----------------------------------------------------------------------
-      CALL csminp%get('WTH', YRDOYWY,"SRAD",SRAD)
-      CALL csminp%get('WTH', YRDOYWY,"TMAX",TMAX)
-      CALL csminp%get('WTH', YRDOYWY,"TMIN",TMIN)
-      CALL csminp%get('WTH', YRDOYWY,"RAIN",RAIN)
-      CALL csminp%get('WTH', YRDOYWY,"DEWP",TDEW)
-      CALL csminp%get('WTH', YRDOYWY,"WIND",WINDSP)
-      CALL csminp%get('WTH', YRDOYWY,"PAR",PAR)
-      CALL csminp%get('WTH', YRDOYWY,"RHUM",RHUM)
-      CALL csminp%get('WTH', YRDOYWY,"VAPR",VAPR)
-      CALL csminp%get('WTH', YRDOYWY,"DCO2",DCO2)
-      CALL csminp%get('WTH', YRDOYWY,"DATE",DATE)
+      CALL fio%get('WTH', YRDOYWY,"SRAD",SRAD)
+      CALL fio%get('WTH', YRDOYWY,"TMAX",TMAX)
+      CALL fio%get('WTH', YRDOYWY,"TMIN",TMIN)
+      CALL fio%get('WTH', YRDOYWY,"RAIN",RAIN)
+      CALL fio%get('WTH', YRDOYWY,"DEWP",TDEW)
+      CALL fio%get('WTH', YRDOYWY,"WIND",WINDSP)
+      CALL fio%get('WTH', YRDOYWY,"PAR",PAR)
+      CALL fio%get('WTH', YRDOYWY,"RHUM",RHUM)
+      CALL fio%get('WTH', YRDOYWY,"VAPR",VAPR)
+      CALL fio%get('WTH', YRDOYWY,"DCO2",DCO2)
+      CALL fio%get('WTH', YRDOYWY,"DATE",DATE)
 
       if(DATE < 0) THEN
-      CALL csminp%get('WTH', YRSIM,"SRAD",SRAD)
-      CALL csminp%get('WTH', YRSIM,"TMAX",TMAX)
-      CALL csminp%get('WTH', YRSIM,"TMIN",TMIN)
-      CALL csminp%get('WTH', YRSIM,"RAIN",RAIN)
-      CALL csminp%get('WTH', YRSIM,"DEWP",TDEW)
-      CALL csminp%get('WTH', YRSIM,"WIND",WINDSP)
-      CALL csminp%get('WTH', YRSIM,"PAR",PAR)
-      CALL csminp%get('WTH', YRSIM,"RHUM",RHUM)
-      CALL csminp%get('WTH', YRSIM,"VAPR",VAPR)
-      CALL csminp%get('WTH', YRSIM,"DCO2",DCO2)
-
+      CALL fio%get('WTH', YRSIM,"SRAD",SRAD)
+      CALL fio%get('WTH', YRSIM,"TMAX",TMAX)
+      CALL fio%get('WTH', YRSIM,"TMIN",TMIN)
+      CALL fio%get('WTH', YRSIM,"RAIN",RAIN)
+      CALL fio%get('WTH', YRSIM,"DEWP",TDEW)
+      CALL fio%get('WTH', YRSIM,"WIND",WINDSP)
+      CALL fio%get('WTH', YRSIM,"PAR",PAR)
+      CALL fio%get('WTH', YRSIM,"RHUM",RHUM)
+      CALL fio%get('WTH', YRSIM,"VAPR",VAPR)
+      CALL fio%get('WTH', YRSIM,"DCO2",DCO2)
+      
       ENDIF
 
 !     Error checking
@@ -383,16 +375,17 @@ C       Substitute default values if REFHT or WINDHT are missing.
       IF (YREND > 0) THEN
 !        WRITE(*,*)"YRDOYWY 1",YRDOYWY
 !       Try again with next weather day (only for initialization)
-      CALL csminp%get('WTH', YRDOYWY+1,"SRAD",SRAD)
-      CALL csminp%get('WTH', YRDOYWY+1,"TMAX",TMAX)
-      CALL csminp%get('WTH', YRDOYWY+1,"TMIN",TMIN)
-      CALL csminp%get('WTH', YRDOYWY+1,"RAIN",RAIN)
-      CALL csminp%get('WTH', YRDOYWY+1,"DEWP",TDEW)
-      CALL csminp%get('WTH', YRDOYWY+1,"WIND",WINDSP)
-      CALL csminp%get('WTH', YRDOYWY+1,"PAR",PAR)
-      CALL csminp%get('WTH', YRDOYWY+1,"RHUM",RHUM)
-      CALL csminp%get('WTH', YRDOYWY+1,"VAPR",VAPR)
-      CALL csminp%get('WTH', YRDOYWY+1,"DCO2",DCO2)
+      CALL fio%get('WTH', YRDOYWY+1,"SRAD",SRAD)
+      CALL fio%get('WTH', YRDOYWY+1,"TMAX",TMAX)
+      CALL fio%get('WTH', YRDOYWY+1,"TMIN",TMIN)
+      CALL fio%get('WTH', YRDOYWY+1,"RAIN",RAIN)
+      CALL fio%get('WTH', YRDOYWY+1,"DEWP",TDEW)
+      CALL fio%get('WTH', YRDOYWY+1,"WIND",WINDSP)
+      CALL fio%get('WTH', YRDOYWY+1,"PAR",PAR)
+      CALL fio%get('WTH', YRDOYWY+1,"RHUM",RHUM)
+      CALL fio%get('WTH', YRDOYWY+1,"VAPR",VAPR)
+      CALL fio%get('WTH', YRDOYWY+1,"DCO2",DCO2)
+
         YREND = -99
 
 !       Error checking
@@ -413,13 +406,14 @@ C       Substitute default values if REFHT or WINDHT are missing.
 !-----------------------------------------------------------------------
 ! FlexibleIO
 !-----------------------------------------------------------------------
-      CALL csminp%get('WTH', YRDOY,"DATE",DATE)
+      CALL fio%get('WTH', YRDOY,"DATE",DATE)
 
       IF(DATE .EQ. -99)THEN
         CALL READWEATHER(FILEWW,YRDOYWY,CONTROL%YRDOY,CONTROL%YRSIM,
      &   CONTROL%MULTI,END_OF_FILE,FILEX,CONTROL%MODEL,1, ErrCode)
         IF(ErrCode .NE. 0) THEN
         CALL WeatherError(CONTROL, ErrCode, FILEWW, 0, YRDOYWY, YREND)
+        CALL ERROR(ERRKEY,ErrCode,FILEWW,0)
         RETURN
         ENDIF
 
@@ -442,6 +436,7 @@ C       Substitute default values if REFHT or WINDHT are missing.
                 ErrCode = 30
                 CALL WeatherError(CONTROL, ErrCode, FILEWW, 0,
      &   						  YRDOYWY,YREND)
+                CALL ERROR(ERRKEY,ErrCode,FILEWW,0)
                 RETURN
               ENDIF
 
@@ -453,27 +448,27 @@ C       Substitute default values if REFHT or WINDHT are missing.
      &         				   END_OF_FILE,FILEX,CONTROL%MODEL,1, ErrCode)
             IF(ErrCode .NE. 0) THEN
             CALL WeatherError(CONTROL,ErrCode,FILEWW, 0,YRDOYWY,YREND)
+            CALL ERROR(ERRKEY,ErrCode,FILEWW,0)
             RETURN
             ENDIF
               LastFileW = FILEW
             ENDIF
       ENDIF
 
-      CALL csminp%get('WTH', YRDOY,"DATE",YRDOYW)
+      CALL fio%get('WTH', YRDOY,"DATE",YRDOYW)
 
       CALL YR_DOY(YRDOYW, YEARW, DOYW)
 
-      CALL csminp%get('WTH', YRDOY,"SRAD",SRAD)
-      CALL csminp%get('WTH', YRDOY,"TMAX",TMAX)
-      CALL csminp%get('WTH', YRDOY,"TMIN",TMIN)
-      CALL csminp%get('WTH', YRDOY,"RAIN",RAIN)
-      CALL csminp%get('WTH', YRDOY,"DEWP",TDEW)
-      CALL csminp%get('WTH', YRDOY,"WIND",WINDSP)
-      CALL csminp%get('WTH', YRDOY,"PAR",PAR)
-      CALL csminp%get('WTH', YRDOY,"RHUM",RHUM)
-      CALL csminp%get('WTH', YRDOY,"VAPR",VAPR)
-      CALL csminp%get('WTH', YRDOY,"DCO2",DCO2)
-
+      CALL fio%get('WTH', YRDOY,"SRAD",SRAD)
+      CALL fio%get('WTH', YRDOY,"TMAX",TMAX)
+      CALL fio%get('WTH', YRDOY,"TMIN",TMIN)
+      CALL fio%get('WTH', YRDOY,"RAIN",RAIN)
+      CALL fio%get('WTH', YRDOY,"DEWP",TDEW)
+      CALL fio%get('WTH', YRDOY,"WIND",WINDSP)
+      CALL fio%get('WTH', YRDOY,"PAR",PAR)
+      CALL fio%get('WTH', YRDOY,"RHUM",RHUM)
+      CALL fio%get('WTH', YRDOY,"VAPR",VAPR)
+      CALL fio%get('WTH', YRDOY,"DCO2",DCO2)
       YRDOYWY = YRDOY
 !     Error checking
       CALL DailyWeatherCheck(CONTROL,
