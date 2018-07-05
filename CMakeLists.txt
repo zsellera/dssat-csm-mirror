@@ -13,7 +13,7 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
    						"CMakeCache.txt and CMakeFiles\n")
 endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 
-PROJECT(DSSAT-CSM Fortran C CXX)
+PROJECT(DSSAT-CSM Fortran CXX)
 
 ##########################################################################################
 # DSSAT_VERSION from ModuleDefs.for
@@ -74,13 +74,9 @@ ENDIF(WIN32)
 
 # Add the source files
 set(
-    source_list
+    FORTRAN_SRC_LIST
     	"${OSDefinitions}"
         "FlexibleIO/Interface/FInterface.f90"
-        "FlexibleIO/Interface/CInterface.cpp"
-        "FlexibleIO/Data/FlexibleIO.cpp"
-        "FlexibleIO/Input/InputWeather.cpp" 
-        "FlexibleIO/Util/Util.cpp"
         "Utilities/ModuleDefs.for"
         "Utilities/DATES.for"
         "Utilities/ERROR.for"
@@ -766,9 +762,23 @@ set(
         "Weather/WGEN.for"
         "Weather/WTHMOD.for"
 )
-ADD_EXECUTABLE(${EXECUTABLE_NAME} ${source_list})
+
+set(
+    CXX_SRC_LIST
+        "FlexibleIO/Interface/CInterface.cpp"
+        "FlexibleIO/Data/FlexibleIO.cpp"
+        "FlexibleIO/Input/InputWeather.cpp" 
+        "FlexibleIO/Util/Util.cpp"
+
+)
+
+ADD_LIBRARY( Flexio ${CXX_SRC_LIST})
+
+ADD_EXECUTABLE(${EXECUTABLE_NAME} ${FORTRAN_SRC_LIST})
 
 SET_TARGET_PROPERTIES(${EXECUTABLE_NAME} PROPERTIES LINKER_LANGUAGE Fortran)
+
+TARGET_LINK_LIBRARIES(${EXECUTABLE_NAME} Flexio)
 
 foreach(source IN LISTS source_list)
     get_filename_component(source_path "${source}" PATH)
@@ -781,9 +791,12 @@ endforeach()
 ##################################################
 
 message( "-- Flags" )
-message( "   FFLAGS       ${CMAKE_Fortran_FLAGS}" )
-message( "   RELEASE      ${CMAKE_Fortran_FLAGS_RELEASE}" )
-message( "   DEBUG        ${CMAKE_Fortran_FLAGS_DEBUG}" )
+message( "   FORTRAN FLAGS       ${CMAKE_Fortran_FLAGS}" )
+message( "   FORTRAN RELEASE      ${CMAKE_Fortran_FLAGS_RELEASE}" )
+message( "   FORTRAN DEBUG        ${CMAKE_Fortran_FLAGS_DEBUG}" )
+message( "   CXX FLAGS       ${CMAKE_CXX_FLAGS}" )
+message( "   CXX RELEASE      ${CMAKE_CXX_FLAGS_RELEASE}" )
+message( "   CXX DEBUG        ${CMAKE_CXX_FLAGS_DEBUG}" )
 message( "-- Build Info" )
 message( "   BUILD TYPE   ${CMAKE_BUILD_TYPE}" )
 message( "   VERSION      ${MAJOR}.${MINOR}.${MODEL}.${BUILD}" )
