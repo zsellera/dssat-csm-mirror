@@ -629,7 +629,6 @@ set(
         "Plant/ORYZA/ttutil/recread.inc"
         "Plant/ORYZA/ttutil/recreadi.f90"
         "Plant/ORYZA/ttutil/recreadt.f90"
-        "Plant/ORYZA/ttutil/remove.for"
         "Plant/ORYZA/ttutil/sfindg.for"
         "Plant/ORYZA/ttutil/sortch.for"
         "Plant/ORYZA/ttutil/sortin.for"

@@ -200,8 +200,6 @@ void setCharMemory(char *GROUP, char *VARNAME, char  *VALUE)
 
     std::string group(GROUP), varname(VARNAME), value(VALUE);
 
-    value.erase(value.find_last_not_of(" " + 1), value.size());
-
     FlexibleIO::getInstance()->setCharMemory(group, varname, value);
 
 }
@@ -229,8 +227,6 @@ void setCharIndexMemory(char *GROUP, char *VARNAME, char  *VALUE, int *INDEX)
 
     std::string group(GROUP), varname(VARNAME), value(VALUE);
 
-    value.erase(value.find_last_not_of(" " + 1), value.size());
-
     FlexibleIO::getInstance()->setCharIndexMemory(group, varname, value, *INDEX);
 
 }
@@ -257,8 +253,6 @@ void setCharYrdoyMemory(char *GROUP, int *YRDOY, char *VARNAME, char *VALUE)
 {
 
     std::string group(GROUP), yrdoy(std::to_string(*YRDOY)), varname(VARNAME), value(VALUE);
-
-    value.erase(value.find_last_not_of(" " + 1), value.size());
 
     FlexibleIO::getInstance()->setCharYrdoyMemory(group, yrdoy, varname, value);
 
