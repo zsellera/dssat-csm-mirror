@@ -168,7 +168,7 @@ C     The components are copied into local variables for use here.
       ErrCode = 0
 
 !-----------------------------------------------------------------------
-!     Don't re-initialize for sequence and seasonal runs
+!     Do not re-initialize for sequence and seasonal runs
       IF (INDEX('FQ',RNMODE) > 0 .AND. RUN > 1) RETURN
 
       OPEN (LUNIO, FILE = FILEIO,STATUS = 'OLD',IOSTAT=ERR)

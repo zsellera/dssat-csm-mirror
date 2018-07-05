@@ -122,7 +122,7 @@ C       Loop until evapotranspiration and photosynthesis are stable.
      &        RCUTIC, REFHT, RHUMHR, STCOND, TAIRHR,      !Input
      &        WINDHR,                                     !Input
      &        EHR, RA, TCAN, THR, TSHR, TSURF, USTAR,     !Output
-     &        RB(3), RSURF, RNET,                         !Output
+     &        RB, RSURF, RNET,                         !Output
      &        G, LH, LHEAT, RSSH, RSSL, RSSS, SH, SHEAT,  !Output
 C        G, LH, LHEAT, RSSH, RSSL, RSSS, SH, SHEAT
 C         RB, RSURF RNET output added DEC2014 by Bruce Kimball

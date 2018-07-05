@@ -652,11 +652,11 @@ subroutine qage ( f, a, b, epsabs, epsrel, key, limit, result, abserr, neval, &
       elist(last) = error1
     end if
 !
-!  Call QSORT to maintain the descending ordering
+!  Call quicksort to maintain the descending ordering
 !  in the list of error estimates and select the subinterval
 !  with the largest error estimate (to be bisected next).
 !
-    call qsort ( limit, last, maxerr, errmax, elist, iord, nrmax )
+    call quicksort ( limit, last, maxerr, errmax, elist, iord, nrmax )
  
     if ( ier /= 0 .or. errsum <= errbnd ) then
       exit
@@ -1031,11 +1031,11 @@ subroutine qagi ( f, bound, inf, epsabs, epsrel, result, abserr, neval, ier )
       elist(last) = error1
     end if
 !
-!  Call QSORT to maintain the descending ordering
+!  Call quicksort to maintain the descending ordering
 !  in the list of error estimates and select the subinterval
 !  with NRMAX-th largest error estimate (to be bisected next).
 !
-    call qsort ( limit, last, maxerr, errmax, elist, iord, nrmax )
+    call quicksort ( limit, last, maxerr, errmax, elist, iord, nrmax )
 
     if ( errsum <= errbnd ) go to 115
 
@@ -1683,11 +1683,11 @@ subroutine qagp ( f, a, b, npts2, points, epsabs, epsrel, result, abserr, &
       elist(last) = error1
     end if
 !
-!  Call QSORT to maintain the descending ordering
+!  Call quicksort to maintain the descending ordering
 !  in the list of error estimates and select the subinterval
 !  with nrmax-th largest error estimate (to be bisected next).
 !
-    call qsort ( limit, last, maxerr, errmax, elist, iord, nrmax )
+    call quicksort ( limit, last, maxerr, errmax, elist, iord, nrmax )
 
     if ( errsum <= errbnd ) go to 190
 
@@ -2185,11 +2185,11 @@ subroutine qags ( f, a, b, epsabs, epsrel, result, abserr, neval, ier )
       elist(last) = error1
     end if
 !
-!  Call QSORT to maintain the descending ordering
+!  Call quicksort to maintain the descending ordering
 !  in the list of error estimates and select the subinterval
 !  with nrmax-th largest error estimate (to be bisected next).
 !
-    call qsort ( limit, last, maxerr, errmax, elist, iord, nrmax )
+    call quicksort ( limit, last, maxerr, errmax, elist, iord, nrmax )
 
     if ( errsum <= errbnd ) go to 115
 
@@ -2775,11 +2775,11 @@ subroutine qawce ( f, a, b, c, epsabs, epsrel, limit, result, abserr, neval, &
       elist(last) = error1
     end if
 !
-!  Call QSORT to maintain the descending ordering
+!  Call quicksort to maintain the descending ordering
 !  in the list of error estimates and select the subinterval
 !  with NRMAX-th largest error estimate (to be bisected next).
 !
-    call qsort ( limit, last, maxerr, errmax, elist, iord, nrmax )
+    call quicksort ( limit, last, maxerr, errmax, elist, iord, nrmax )
 
     if ( ier /= 0 .or. errsum <= errbnd ) then
       exit
@@ -4002,11 +4002,11 @@ subroutine qawse ( f, a, b, alfa, beta, integr, epsabs, epsrel, limit, &
       elist(last) = error1
     end if
 !
-!  Call QSORT to maintain the descending ordering
+!  Call quicksort to maintain the descending ordering
 !  in the list of error estimates and select the subinterval
 !  with largest error estimate (to be bisected next).
 !
-    call qsort ( limit, last, maxerr, errmax, elist, iord, nrmax )
+    call quicksort ( limit, last, maxerr, errmax, elist, iord, nrmax )
 
     if (ier /= 0 .or. errsum <= errbnd ) then
       exit
@@ -5861,13 +5861,13 @@ subroutine qfour ( f, a, b, omega, integr, epsabs, epsrel, limit, icall, &
       elist(last) = error1
     end if
 !
-!  Call QSORT to maintain the descending ordering
+!  Call quicksort to maintain the descending ordering
 !  in the list of error estimates and select the subinterval
 !  with nrmax-th largest error estimate (to be bisected next).
 !
 40  continue
 
-    call qsort ( limit, last, maxerr, errmax, elist, iord, nrmax )
+    call quicksort ( limit, last, maxerr, errmax, elist, iord, nrmax )
 
     if ( errsum <= errbnd ) then
       go to 170
@@ -8069,11 +8069,11 @@ subroutine qng ( f, a, b, epsabs, epsrel, result, abserr, neval, ier )
 
   return
 end
-subroutine qsort ( limit, last, maxerr, ermax, elist, iord, nrmax )
+subroutine quicksort ( limit, last, maxerr, ermax, elist, iord, nrmax )
 ! 
 !******************************************************************************
 !
-!! QSORT maintains the order of a list of local error estimates.
+!! quicksort maintains the order of a list of local error estimates.
 !
 !
 !  Discussion:

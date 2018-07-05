@@ -52,8 +52,8 @@ ENDIF(CMAKE_Fortran_FLAGS_RELEASE AND CMAKE_Fortran_FLAGS_TESTING AND CMAKE_Fort
 #####################
 
 # Don't add underscores in symbols for C-compatability
-#SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
-#                 Fortran "-fno-underscoring")
+SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
+                 Fortran "-fno-underscoring")
 
 # There is some bug where -march=native doesn't work on Mac
 IF(APPLE)
@@ -101,7 +101,7 @@ SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
 # Ref: https://software.intel.com/en-us/node/691772
 SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
                  Fortran "/Qsave" 			# Intel Windows
-                 		 "-save"  			# Intel
+                 		     "-save"  			# Intel
                 )
 
 # Enable preprocessing
@@ -132,6 +132,15 @@ SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
                  Fortran "/fpe:0" # Intel Windows
                          "-fpe0"  # Intel Linux/Mac		 
                 )
+####################
+### LINKER FLAGS ###
+####################
+
+SET_COMPILE_FLAG(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG}"
+                 Fortran "/FORCE" # MSVC
+                 	       "-cxxlib"      # Intel
+			                   "-static"      # GNU
+                )
 
 ###################
 ### DEBUG FLAGS ###
@@ -143,6 +152,7 @@ SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
 SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG}"
                  Fortran REQUIRED "/Od" # Intel Windows
                                   "-O0" # All compilers not on Windows
+                                  "-g" # GNU
                 )
 
 # Turn on all warnings 
@@ -216,9 +226,9 @@ SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE}"
 #                         "-ip"  # Intel
 #                )
 
-## Vectorize code
-#SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE}"
-#                 Fortran "/Qvec-report0" # Intel Windows
-#                         "-vec-report0"  # Intel
-#                         "-Mvect"        # Portland Group
-#                )
+# Vectorize code
+SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE}"
+                 Fortran "/Qvec-report0" # Intel Windows
+                         "-vec-report0"  # Intel
+                         "-Mvect"        # Portland Group
+                )
