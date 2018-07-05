@@ -29,8 +29,7 @@ ENDIF(BT STREQUAL "RELEASE")
 # Determine and set the CXX compiler flags we want 
 ######################################################
 SET_COMPILE_FLAG(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}"
-                 CXX "/EHsc"           # MSVC
-                     "/std:c++latest"  # MSVC
+                 CXX "/std:c++latest"  # MSVC
                      "-std=c++0x"      # GNU
                      "-std=gnu++0x"    # GNU
                      " -c"             # GNU
@@ -41,4 +40,9 @@ SET_COMPILE_FLAG(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}"
                  CXX  "/MTd"          # MSVC
                       "-g"            # GNU
 
-		            )
+		)
+
+SET_COMPILE_FLAG(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}"
+                 CXX  "/MT"          # MSVC
+
+	        )
