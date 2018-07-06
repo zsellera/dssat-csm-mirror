@@ -45,7 +45,7 @@
                 "cwd": "${workspaceRoot}/build"
             },
             "type": "shell",
-            "dependsOn": "dssat-csm: create build dir",
+            "dependsOn": "dssat-csm: CMake",
             "group": {
                 "kind": "build",
                 "isDefault": true
