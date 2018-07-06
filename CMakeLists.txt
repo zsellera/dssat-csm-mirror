@@ -780,7 +780,7 @@ SET_TARGET_PROPERTIES(${EXECUTABLE_NAME} PROPERTIES LINKER_LANGUAGE Fortran)
 
 TARGET_LINK_LIBRARIES(${EXECUTABLE_NAME} Flexio)
 
-foreach(source IN LISTS source_list)
+foreach(source IN LISTS FORTRAN_SRC_LIST)
     get_filename_component(source_path "${source}" PATH)
     string(REPLACE "/" "\\" source_path_msvc "${source_path}")
     source_group("${source_path_msvc}" FILES "${source}")
@@ -791,10 +791,10 @@ endforeach()
 ##################################################
 
 message( "-- Flags" )
-message( "   FORTRAN FLAGS       ${CMAKE_Fortran_FLAGS}" )
-message( "   FORTRAN RELEASE      ${CMAKE_Fortran_FLAGS_RELEASE}" )
-message( "   FORTRAN DEBUG        ${CMAKE_Fortran_FLAGS_DEBUG}" )
-message( "   CXX FLAGS       ${CMAKE_CXX_FLAGS}" )
+message( "   FORTRAN FLAGS      ${CMAKE_Fortran_FLAGS}" )
+message( "   FORTRAN RELEASE    ${CMAKE_Fortran_FLAGS_RELEASE}" )
+message( "   FORTRAN DEBUG      ${CMAKE_Fortran_FLAGS_DEBUG}" )
+message( "   CXX FLAGS        ${CMAKE_CXX_FLAGS}" )
 message( "   CXX RELEASE      ${CMAKE_CXX_FLAGS_RELEASE}" )
 message( "   CXX DEBUG        ${CMAKE_CXX_FLAGS_DEBUG}" )
 message( "-- Build Info" )
