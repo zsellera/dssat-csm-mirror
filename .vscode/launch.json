@@ -1,14 +1,15 @@
+
 {
     //DEBUG DSSAT-CSM
     "version": "2.0.0",
     "configurations": [
         {
-            "name": "GDB Debug DSSAT-CSM",
+            "name": "Debug DSSAT-CSM",
             //Select plataform
             "windows": {
                 "cwd": "C:\\DSSAT47\\Maize",                          //<- Set execution working directory
                 "args": ["C", "UFGA8201.MZX", "1"],                   //<- Set program's arguments
-                "miDebuggerPath": "C:\\Program Files\\mingw-w64\\x86_64-8.1.0-win32-seh-rt_v6-rev0\\mingw64\\bin\\gdb.exe", //<- Set Debugger path    
+                "miDebuggerPath": "gdb.exe",                          //<- Set Debugger path    
             },
             "osx": {
                 "cwd": "/DSSAT47/Maize",                             //<- Set execution working directory
