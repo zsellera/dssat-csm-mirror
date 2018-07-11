@@ -16,7 +16,7 @@ endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 PROJECT(DSSAT-CSM Fortran CXX)
 
 ##########################################################################################
-# DSSAT_VERSION from ModuleDefs.for
+# DSSAT_VERSION
 ##########################################################################################
 
 SET(MAJOR 4)
@@ -85,13 +85,25 @@ ENDIF(FCNAME STREQUAL "pgf90")
 ##########################################################################################
 
 # Define the executable name and OSDefinitions file
+SET(EXECUTABLE_NAME dscsm0${MAJOR}${MINOR})
+configure_file(
+    "${PROJECT_SOURCE_DIR}/Utilities/CSMVersion.for.in"
+    "${PROJECT_SOURCE_DIR}/Utilities/CSMVersion.for"
+)
 IF(WIN32)
-    SET(EXECUTABLE_NAME dscsm0${MAJOR}${MINOR})
     SET(OSDefinitions "Utilities/OSDefsWINDOWS.for")
     add_definitions(-DWIN32=1})
 ELSE()
-    SET(EXECUTABLE_NAME dscsm0${MAJOR}${MINOR}.exe)
+    SET(DSSAT_INSTALL_DIR $CMAKE_INSTALL_PREFIX)
     SET(OSDefinitions "Utilities/OSDefsLINUX.for")
+    configure_file(
+        "${PROJECT_SOURCE_DIR}/Data/DSSATPRO.L47.in"
+		"${PROJECT_SOURCE_DIR}/Data/DSSATPRO.L47"
+    )
+	configure_file(
+		"${PROJECT_SOURCE_DIR}/Utilities/run_dssat.in"
+		"${PROJECT_SOURCE_DIR}/Utilities/run_dssat"
+	)
 ENDIF(WIN32)
 
 # Add the source files
@@ -99,6 +111,7 @@ set(
     FORTRAN_SRC_LIST
     	"${OSDefinitions}"
         "FlexibleIO/Interface/FInterface.f90"
+        "Utilities/CSMVersion.for"
         "Utilities/ModuleDefs.for"
         "Utilities/DATES.for"
         "Utilities/ERROR.for"
@@ -807,6 +820,17 @@ foreach(source IN LISTS FORTRAN_SRC_LIST)
     string(REPLACE "/" "\\" source_path_msvc "${source_path}")
     source_group("${source_path_msvc}" FILES "${source}")
 endforeach()
+
+
+install(TARGETS ${EXECUTABLE_NAME} DESTINATION
+	RUNTIME DESTINATION .)
+
+install(FILES Utilities/run_dssat DESTINATION .
+	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+	)
+
+install(DIRECTORY Data/ DESTINATION .
+	PATTERN "*.in" EXCLUDE)
 
 ##################################################
 # Resume information about flags and option used #
