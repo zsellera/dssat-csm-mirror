@@ -19,15 +19,37 @@ PROJECT(DSSAT-CSM Fortran CXX)
 # DSSAT_VERSION from ModuleDefs.for
 ##########################################################################################
 
-file(READ "${CMAKE_SOURCE_DIR}/Utilities/ModuleDefs.for" File_Content)
+SET(MAJOR 4)
+SET(MINOR 7)
+SET(MODEL 2)
+SET(BUILD 1)
 
-# Take DSSAT_VERSION from ModuleDefs.for
-STRING(REGEX REPLACE ".*Major = ([0-9]+).*" "\\1" MAJOR "${File_Content}")
-STRING(REGEX REPLACE ".*Minor = ([0-9]+).*" "\\1" MINOR "${File_Content}")
-STRING(REGEX REPLACE ".*Model = ([0-9]+).*" "\\1" MODEL "${File_Content}")
-STRING(REGEX REPLACE ".*Build = ([0-9]+).*" "\\1" BUILD "${File_Content}")
-MESSAGE(STATUS "MAJOR: ${MAJOR} MINOR: ${MINOR} MODEL: ${MODEL} BUILD: ${BUILD}")
+# Get the current working branch
+execute_process(
+  COMMAND git rev-parse --abbrev-ref HEAD
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE BRANCH
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 
+# Get the latest commit hash of the working branch
+execute_process(
+  COMMAND git log -1 --format=%H
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_COMMIT_HASH
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+# Get the latest abbreviated commit hash of the working branch
+execute_process(
+  COMMAND git log -1 --format=%h
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_COMMIT_HASH_ABBR
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+MESSAGE(STATUS "MAJOR: ${MAJOR} MINOR: ${MINOR} MODEL: ${MODEL} BUILD: ${BUILD} COMMIT: ${GIT_COMMIT_HASH_ABBR}")
+MESSAGE(STATUS "BRANCH: ${BRANCH}")
+MESSAGE(STATUS "COMMIT: ${GIT_COMMIT_HASH}")
 # Set the version
 SET(VERSION ${MAJOR}.${MINOR}.${MODEL})
 
